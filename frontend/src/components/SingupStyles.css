@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.container {
+  display: grid;
+  height: 100vh;
+  place-items: center;
+  background-image: linear-gradient(#ff7f50, #fff6e4, #006400);
+}
+
+.paper-container {
+  padding: 30px;
+  border: 5px solid green;
+  border-radius: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.role-button {
+  margin-right: 10px;
+}
+
+.text-field {
+  width: 100%;
+}
+
+.login-button {
+  background-color: green;
+  border-radius: 8px;
+}
+
+.register-button {
+  background-color: white;
+  color: green;
+  border: 1px solid green;
+  border-radius: 8px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 12px;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link-button {
+  text-align: center;
+}
