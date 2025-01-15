@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pie } from "react-chartjs-2";
+import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
 const AnalyticsPage = () => {
@@ -9,7 +9,8 @@ const AnalyticsPage = () => {
     totalDeceased: 0,
     raceDistribution: [],
     insuranceDistribution: [],
-    genderCount: [], // Add genderCount to state
+    genderCount: [],
+    ageDistribution: [],
   });
 
   useEffect(() => {
@@ -57,13 +58,23 @@ const AnalyticsPage = () => {
     ],
   };
 
+  const ageData = {
+    labels: analytics.ageDistribution.map((item) => item._id),
+    datasets: [
+      {
+        label: "Age Distribution",
+        data: analytics.ageDistribution.map((item) => item.count),
+        backgroundColor: "#42a5f5",
+      },
+    ],
+  };
+
   return (
-    <div className="flex items-center justify-center w-screen h-screen bg-gray-100 p-6">
+    <div className="flex items-center justify-center w-screen  bg-gray-100 p-6">
       <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-6">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Admissions Analytics</h1>
 
         <div className="flex flex-wrap justify-around gap-4 mb-6">
-          {/* Analytics Cards */}
           <div className="w-40 h-28 bg-blue-100 shadow-md rounded-lg flex flex-col items-center justify-center text-blue-800">
             <h2 className="text-lg font-semibold">Admissions</h2>
             <p className="text-2xl font-bold">{analytics.totalAdmissions}</p>
@@ -79,24 +90,26 @@ const AnalyticsPage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Race Distribution */}
           <div className="bg-gray-50 p-4 shadow-md rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-gray-700">Race Distribution</h2>
             <Pie data={raceData} />
           </div>
 
-          {/* Insurance Distribution */}
           <div className="bg-gray-50 p-4 shadow-md rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-gray-700">Insurance Distribution</h2>
             <Pie data={insuranceData} />
           </div>
 
-          {/* Gender Distribution */}
           <div className="bg-gray-50 p-4 shadow-md rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-gray-700">Gender Distribution</h2>
             <Pie data={genderData} />
           </div>
+
         </div>
+          <div className="bg-gray-50 p-4 shadow-md rounded-lg">
+            <h2 className="text-lg font-semibold mb-2 text-gray-700">Age Distribution</h2>
+            <Bar data={ageData} />
+          </div>
       </div>
     </div>
   );

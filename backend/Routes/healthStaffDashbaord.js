@@ -142,6 +142,20 @@ router.get("/analytics", async (req, res) => {
       { $group: { _id: "$insurance", count: { $sum: 1 } } },
     ]);
 
+    // Age distribution for bar chart
+    const ageDistribution = await Admission.aggregate([
+      {
+        $bucket: {
+          groupBy: "$age", // Field to group by
+          boundaries: [0, 18, 30, 40, 50, 60, 70, 80, 90, 100], // Define age ranges
+          default: "100+", // Optional: Group ages above the last boundary
+          output: {
+            count: { $sum: 1 }, // Count documents in each age range
+          },
+        },
+      },
+    ]);
+
     res.json({
       totalAdmissions,
       totalDischarged,
@@ -150,10 +164,12 @@ router.get("/analytics", async (req, res) => {
       insuranceDistribution,
       patientrows,
       genderCount, // Added gender count for pie chart
+      ageDistribution, // Added age distribution for bar chart
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 module.exports = router;
