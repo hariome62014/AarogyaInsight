@@ -9,6 +9,7 @@ const AnalyticsPage = () => {
     totalDeceased: 0,
     raceDistribution: [],
     insuranceDistribution: [],
+    genderCount: [], // Add genderCount to state
   });
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const AnalyticsPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data, "analytics ka data h ye");
+        console.log(data, "analytics data");
         setAnalytics(data);
       });
   }, []);
@@ -42,6 +43,16 @@ const AnalyticsPage = () => {
       {
         data: analytics.insuranceDistribution.map((item) => item.count),
         backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff"],
+      },
+    ],
+  };
+
+  const genderData = {
+    labels: analytics.genderCount.map((item) => item._id),
+    datasets: [
+      {
+        data: analytics.genderCount.map((item) => item.count),
+        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
       },
     ],
   };
@@ -67,7 +78,7 @@ const AnalyticsPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Race Distribution */}
           <div className="bg-gray-50 p-4 shadow-md rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-gray-700">Race Distribution</h2>
@@ -78,6 +89,12 @@ const AnalyticsPage = () => {
           <div className="bg-gray-50 p-4 shadow-md rounded-lg">
             <h2 className="text-lg font-semibold mb-2 text-gray-700">Insurance Distribution</h2>
             <Pie data={insuranceData} />
+          </div>
+
+          {/* Gender Distribution */}
+          <div className="bg-gray-50 p-4 shadow-md rounded-lg">
+            <h2 className="text-lg font-semibold mb-2 text-gray-700">Gender Distribution</h2>
+            <Pie data={genderData} />
           </div>
         </div>
       </div>

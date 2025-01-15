@@ -665,7 +665,7 @@ const SignUp = () => {
           Select Your Role:
         </Typography>
         <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
-          {["Admin", "Patient", "Doctor", "HealthStaff"].map((role) => (
+          {[/*"Admin",*/ "Patient", /* "Doctor" */ , "HealthStaff"].map((role) => (
             <Button
               key={role}
               variant="contained"

@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const patientsSchema = new mongoose.Schema({
-  subject_id: {
+  SUBJECT_ID: {
     type: String,
     required: true,
     unique: true,
   },
-  gender: {
+  GENDER: {
     type: String,
   },
   anchor_age: {

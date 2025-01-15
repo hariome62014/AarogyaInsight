@@ -2,27 +2,28 @@ const mongoose = require("mongoose");
 
 const admissionSchema = new mongoose.Schema({
   subject_id: {
-    type: String,
-    ref: "User",
-
+    type: Number,
     required: true,
   },
   hadm_id: { type: Number, unique: true, required: true },
   // admissionDate: { type: Date, required: true },
   admittime: { type: String, required: true },
-  dischtime: { type: String, required: true },
+  dischtime: { type: String, },
   deathtime: { type: String, required: false },
-  admission_type: { type: String, required: true },
-  admission_provider_id: { type: String, required: true },
-  admission_location: { type: String, required: true },
-  discharge_location: { type: String, required: true },
-  insurance: { type: String, required: true },
-  language: { type: String, required: true },
-  martial_status: { type: String, required: true },
-  race: { type: String, required: true },
-  edregtime: { type: String, required: true },
-  edouttime: { type: String, required: true },
-  // hospital_expire_flag: { type: Number, required: true },
+  admission_type: { type: String, },
+  admission_provider_id: { type: String, },
+  admission_location: { type: String, },
+  discharge_location: { type: String, },
+  insurance: { type: String, },
+  language: { type: String},
+  martial_status: { type: String },
+  race: { type: String  },
+  religion: { type: String  },  
+  ethnicity: { type: String  },
+  edregtime: { type: String },
+  edouttime: { type: String},
+  diagnosis : { type : String },
+  hospital_expire_flag: { type: Number },
 });
 
 const Admission = mongoose.model("Admission", admissionSchema);

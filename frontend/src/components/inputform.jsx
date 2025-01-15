@@ -1,102 +1,108 @@
-// InputForm.js
 import React, { useState } from 'react';
-// import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-function InputForm() {
+const InputForm = () => {
     const [formData, setFormData] = useState({
-        actual_age: '',
-        admission_hour: '',
-        admission_day_of_week: '',
-        gender: '',
+        subject_id: '',
+        hadm_id: '',
+        icd_code: '',
         admission_type: '',
         admission_location: '',
         discharge_location: '',
         insurance: '',
+        language: '',
+        religion: '',
         marital_status: '',
-        race: ''
+        ethnicity: '',
+        gender: ''
     });
-    const [predictions, setPredictions] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const [result, setResult] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
-        setPredictions(null);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        // Ensure subject_id and hadm_id are numbers
+        const dataToSend = {
+            ...formData,
+            subject_id: Number(formData.subject_id),
+            hadm_id: Number(formData.hadm_id)
+        };
 
         try {
-            // axios nii h abhi , fetch se kar sakte  ya npm install
+            console.log(dataToSend, "ye bhej raha hu");
+            const response = await fetch('http://localhost:8000/predict/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-
-            // const response = await axios.post('http://localhost:5001/predict', formData);
-            // setPredictions({
-            //     mortalityPrediction: response.data.mortalityPrediction,
-            //     losPrediction: response.data.losPrediction
-            // });
+            const result = await response.json();
+            console.log('Success:', result);
+            setResult(result);
         } catch (error) {
-            console.error("Prediction error:", error);
-            setError('Prediction failed. Please check your input data.');
-        } finally {
-            setLoading(false);
+            console.error('Error:', error);
         }
     };
 
     return (
-        <div className="max-w-3xl mx-auto px-4 py-8 bg-white shadow-lg rounded-lg">
-            <h1 className="text-2xl font-bold mb-6 text-center">Enter Details for Prediction</h1>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {Object.keys(formData).map((field) => (
-                    <div key={field} className="flex flex-col">
-                        <label className="text-gray-700 font-semibold">
-                            {field.replace(/_/g, ' ')}
-                        </label>
-                        <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                            required
-                        />
-                    </div>
+        <div className="max-w-md mx-auto p-4">
+            <h1 className="text-xl font-bold mb-4">Patient Admission Form</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+                <input
+                    type="number"
+                    name="subject_id"
+                    value={formData.subject_id}
+                    onChange={handleChange}
+                    className="border rounded p-2 w-full"
+                    placeholder="SUBJECT ID"
+                />
+                <input
+                    type="number"
+                    name="hadm_id"
+                    value={formData.hadm_id}
+                    onChange={handleChange}
+                    className="border rounded p-2 w-full"
+                    placeholder="HADM ID"
+                />
+                {Object.keys(formData).filter(key => key !== 'subject_id' && key !== 'hadm_id').map((key) => (
+                    <input
+                        key={key}
+                        type="text"
+                        name={key}
+                        value={formData[key]}
+                        onChange={handleChange}
+                        className="border rounded p-2 w-full"
+                        placeholder={key.replace('_', ' ').toUpperCase()}
+                    />
                 ))}
-
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
                 >
-                    {loading ? 'Predicting...' : 'Submit'}
+                    Submit
                 </button>
             </form>
-
-            {error && <p className="mt-4 text-center text-red-500">{error}</p>}
-
-            {predictions && (
-                <div className="mt-6 bg-gray-100 p-4 rounded-lg">
-                    <h2 className="text-lg font-bold mb-2">Prediction Results</h2>
-                    <p>Mortality Prediction: {predictions.mortalityPrediction}</p>
-                    <p>Length of Stay Prediction: {predictions.losPrediction} days</p>
+            {result && (
+                <div className="mt-4 p-4 border rounded bg-gray-100">
+                    <h2 className="text-lg font-semibold">Result:</h2>
+                    <pre>{JSON.stringify(result, null, 2)}</pre>
                 </div>
             )}
-
-            <button
-                onClick={() => navigate('/')}
-                className="mt-6 w-full bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition"
-            >
-                Back to Dataset
-            </button>
         </div>
     );
-}
+};
 
 export default InputForm;

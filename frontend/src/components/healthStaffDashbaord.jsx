@@ -55,7 +55,7 @@ const HealthStaffDashboard = () => {
     }]
   });
   const [idx, setIdx] = useState(null);
-  
+
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
@@ -87,7 +87,7 @@ const HealthStaffDashboard = () => {
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient);
   };
- 
+
   // const handleOpenModal = () => setOpenModal(true);
   // const handleCloseModal = () => setOpenModal(false);
   const handleGenerateReport = (index) => {
@@ -107,9 +107,9 @@ const HealthStaffDashboard = () => {
         const values = Object.values(data);
         // const classes = values[0].map((_, index) => {
         //   return `Class ${index + 1}`;
-        
-        const classes=['Less than 3 days','3 to 7 days','7 to 15 days','Greater than 15 days']
-      // });
+
+        const classes = ['Less than 3 days', '3 to 7 days', '7 to 15 days', 'Greater than 15 days']
+        // });
         // Generate a dynamic list of colors for the chart
         const backgroundColor = values[0].map((_, index) => {
           const hue = (index * 360) / values[0].length;
@@ -143,7 +143,7 @@ const HealthStaffDashboard = () => {
         const values = Object.values(data);
         // const classes = values[0].map((_, index) => {
         //   return `Class ${index + 1}`;
-        const classes=['Dead','Alive']
+        const classes = ['Dead', 'Alive']
         // });
 
         // Generate a dynamic list of colors for the chart
@@ -197,7 +197,7 @@ const HealthStaffDashboard = () => {
         console.error("Error generating report:", error);
       });
   }; //file output
-  
+
   const styles = {
     patientCard: {
       border: "1px solid #ddd",
@@ -260,8 +260,12 @@ const HealthStaffDashboard = () => {
   //   ));
   // };
 
-  const handle_patient = ()=>{
+  const handle_patient = () => {
     navigate("../patient-list");
+  }
+
+  const handle_reports = () => {
+    navigate("../patient-reports");
   }
 
   return (
@@ -279,7 +283,7 @@ const HealthStaffDashboard = () => {
     //     {/* <Button variant="contained" color="primary" onClick={handleGenerateReport}>
     //       Generate Report
     //     </Button> */}
-        
+
     //     {/* <Typography variant="h4">Health Staff Dashboard</Typography> */}
     //   </Box>
 
@@ -361,7 +365,7 @@ const HealthStaffDashboard = () => {
     //       </TableBody>
     //     </Table>
     //   </TableContainer>
-      
+
     //   <div style={{width: '100%', display: 'flex', justifyContent: 'space-around'}}>
     //     <div style={{ height: '300px', width: '300px' }}>
     //       <Pie data={chartData1} />
@@ -372,7 +376,7 @@ const HealthStaffDashboard = () => {
     //     <div style={{ height: '600px', width: '600px' }}>
     //     {/* <Bar data= {barData}/> */}
     //         {idx !== null && <Bar data= {barData}/>}
-          
+
     //     </div>
     //   </div>
 
@@ -474,16 +478,27 @@ const HealthStaffDashboard = () => {
     //       <Button variant="contained" color="primary" onClick={handleLogout}>
     //         Logout
     //       </Button>
-          
+
     //        {/* Render the PredictionReport component */}
-    
+
     //     </Paper>
     //   )}
     // </div>    
     <div>
-      <AnalyticsDashboard/>
-      <Button className="" onClick={handle_patient}>See Patient List</Button>
+      <AnalyticsDashboard />
+      <div className="flex justify-center space-x-4 mt-4">
+        <button className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none"
+        onClick={handle_patient}>
+          See Patient List
+        </button>
+        <button className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 focus:outline-none"
+        onClick={handle_reports}>
+          See Patient Reports
+        </button>
+      </div>
+
     </div>
+    
   );
 };
 

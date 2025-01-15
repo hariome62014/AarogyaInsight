@@ -54,6 +54,8 @@ import XRayReportForm from "./Forms/XrayReports.jsx";
 import PredictionReport from "./components/predictReport.jsx";
 import PatientList from "./components/patientList.jsx";
 import InputForm from "./components/inputform.jsx";
+import Reports_text from "./components/reportsTable.jsx";
+import PatientTextInput from "./components/patient_text_input_form.jsx";
 
 function App() {
   return (
@@ -93,6 +95,8 @@ function App() {
             />{" "}
             <Route path="/patient-dashboard" element={<PatientDashboard />} />
             <Route path="/patient-list" element={<PatientList />} />
+            <Route path="/patient-reports" element={<Reports_text />} />
+            <Route path="/text-form" element={<PatientTextInput />} />
             {/* <Route path="/admission" element={<AdmissionForm />} /> */}
             {/* Route to the Admission Form */}
             <Route path="/admission" element={<AdmissionForm />} />

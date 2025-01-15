@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-
-
 const PatientList = () => {
   const [admissions, setAdmissions] = useState([]);
+  const [predictions, setPredictions] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
   const navigate = useNavigate();
@@ -35,6 +34,44 @@ const PatientList = () => {
     });
   };
 
+  const handlePredict = async ( admission ) => {
+    try {
+
+      const send = {
+        "subject_id": admission.subject_id,
+        "hadm_id": admission.hadm_id,
+        "icd_code":  admission.diagnosis ,
+        "admission_type": admission.admission_type ,
+        "admission_location": admission.admission_location ,
+        "discharge_location": admission.admission_location,
+        "insurance": admission.insurance ,
+        "language": admission.language,
+        "religion": admission.religion,
+        "marital_status": admission.marital_status,
+        "ethnicity": admission.ethnicity,
+        "gender": admission.gender
+    }
+
+      console.log ( send , " sending this one ")
+      const response = await fetch("http://localhost:8000/predict/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(send),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setPredictions((prev) => ({ ...prev, [admission.hadm_id]: result }));
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const totalPages = Math.ceil(admissions.length / rowsPerPage);
   const displayedAdmissions = admissions.slice(
     (currentPage - 1) * rowsPerPage,
@@ -49,20 +86,20 @@ const PatientList = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
-  const openform = ()=>{
-    navigate("../input-form")
-  }
+  const openform = () => {
+    navigate("../input-form");
+  };
 
   return (
     <div className="container mx-auto pt-4">
-      <h1 className="text-2xl font-bold mb-4">Patient Data with prediction</h1>
-      <div className=" m-4">
+      <h1 className="text-2xl font-bold mb-4">Patient Data with Prediction</h1>
+      <div className="m-4">
         <button
-          onClick={openform }
+          onClick={openform}
           className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700 transition-colors"
         >
-          Predict for new patient
-        </button>        
+          Predict for New Patient
+        </button>
       </div>
       <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead className="bg-gray-800 text-white">
@@ -77,6 +114,7 @@ const PatientList = () => {
             <th className="text-left px-4 py-2">Admission Location</th>
             <th className="text-left px-4 py-2">Discharge Location</th>
             <th className="text-left px-4 py-2">Diagnosis</th>
+            <th className="text-left px-4 py-2">Prediction</th>
             <th className="text-left px-4 py-2">Action</th>
           </tr>
         </thead>
@@ -94,8 +132,15 @@ const PatientList = () => {
               <td className="px-4 py-2">{admission.discharge_location}</td>
               <td className="px-4 py-2">{admission.diagnosis}</td>
               <td className="px-4 py-2">
+                {predictions[admission.hadm_id] ? (
+                  <pre>{JSON.stringify(predictions[admission.hadm_id], null, 2)}</pre>
+                ) : (
+                  "No prediction"
+                )}
+              </td>
+              <td className="px-4 py-2">
                 <button
-                  onClick={() => console.log(`Predict for ${admission.hadm_id}`)}
+                  onClick={() => handlePredict(admission)}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
                 >
                   Predict
