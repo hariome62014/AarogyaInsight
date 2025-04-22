@@ -5,10 +5,14 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
 import AdminTheme from "./styles/adminTheme";
 import HomePage from "./components/HomePage";
-import SignUp from "./components/SignUp";
+import Signup from './pages/Signup.js'
+import { setProgress } from "./slices/loadingBarSlice.js";
+import { RiWifiOffLine } from "react-icons/ri";
+
+
+import NavBar from "./components/common/NavBar.js";
 import RegistrationForm from "./components/RegistrationForm";
 import DoctorRegistrationForm from "./components/doctorRegistrationForm";
 import AdminRegistrationForm from "./components/adminRegistrationForm";
@@ -56,16 +60,148 @@ import PatientList from "./components/patientList.jsx";
 import InputForm from "./components/inputform.jsx";
 import Reports_text from "./components/reportsTable.jsx";
 import PatientTextInput from "./components/patient_text_input_form.jsx";
+import PrivateRoute from "./components/core/Auth/PrivateRoute.js";
+import OpenRoute from "./components/core/Auth/OpenRoute.js";
+import Login from "./pages/Login.js";
+import VerifyOtp from "./pages/VerifyOtp.js";
+import ResetPassword from "./pages/ResetPassword.js";
+import ForgotPassword from "./pages/ForgotPassword";
+import Footer from "./components/common/Footer.js";
+import { useLocation } from "react-router-dom";
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useSelector } from "react-redux";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+      light: '#63a4ff', // Define the light color explicitly
+      dark: '#004ba0',
+    },
+    secondary: {
+      main: '#dc004e',
+      light: '#ff5c8d',
+      dark: '#9a0036',
+    },
+  },
+});
+
+const FooterWrapper = () => {
+  const location = useLocation();
+
+  // Paths where the Footer should be hidden
+  const hiddenPaths = ["/login", "/signup", "/forgot-password","/verify-email"];
+  
+  // Check if the path matches any of the static paths or the dynamic update-password path
+  const isHidden = hiddenPaths.includes(location.pathname) || 
+                   location.pathname.startsWith("/update-password/");
+
+  if (isHidden) {
+    return null;
+  }
+
+  return <Footer />;
+};
+
+
+
+
 
 function App() {
+
+  const user  = useSelector(state=>state.profile);
+  console.log("UserData: ",user);
+
+
   return (
-    <div className="App">
-      <ThemeProvider theme={AdminTheme}>
-        <Router>
+    <div className="App relative">
+      <ThemeProvider theme={theme}>
+
+
+      <NavBar setProgress={setProgress} className="fixed top-0 left-0 w-full z-50"></NavBar>
+
+      {!navigator.onLine && (
+        <div className="bg-red-500 flex text-white text-center p-2 bg-richblack-300 justify-center gap-2 items-center">
+          <RiWifiOffLine size={22} />
+          Please check your internet connection.
+          <button
+            className="ml-2 bg-richblack-500 rounded-md p-1 px-2 text-white"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+       
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signin" element={<SignUp />} />
-            <Route path="/register" element={<RegistrationForm />} />
+             {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={
+          <OpenRoute>
+          <Login />
+          </OpenRoute>
+          } />
+        <Route path="/signup" element={
+          <OpenRoute>
+          <Signup />
+          </OpenRoute>
+          } />
+        <Route path="/register" element={
+          <OpenRoute>
+          <RegistrationForm />
+          </OpenRoute>} />
+        <Route path="/forgot-password" element={
+          <OpenRoute>
+          <ForgotPassword />
+          </OpenRoute>
+        } />
+        <Route path="/update-password/:id" element={
+          <OpenRoute>
+          <ResetPassword />
+          </OpenRoute>
+          } />
+        <Route path="/verify-email" element={
+          <OpenRoute>
+          <VerifyOtp />
+          </OpenRoute>}
+           />
+        <Route path="/register-health-staff" element={
+          <OpenRoute>
+          <HealthStaffRegistration />
+          </OpenRoute>
+        }/>
+
+      
+          <Route path="/health-staff-dashboard" element={
+            <PrivateRoute>
+            <HealthStaffDashboard />
+            </PrivateRoute>}/>
+          <Route path="/input-form" element={
+            <PrivateRoute>
+            <InputForm />
+            </PrivateRoute>
+            } />
+          <Route path="/patient-list" element={
+            <PrivateRoute>
+            <PatientList />
+            </PrivateRoute>
+          } />
+          <Route path="/patient-reports" element={
+            <PrivateRoute>
+            <Reports_text />
+            </PrivateRoute>
+            } />
+          <Route path="/text-form" element={<PrivateRoute>
+            <PatientTextInput />
+            </PrivateRoute>} />
+
+
+          <Route path="*" element={<HomePage />} />
+       
+
+
+{/* 
             <Route
               path="/doctor-registration"
               element={<DoctorRegistrationForm />}
@@ -74,42 +210,28 @@ function App() {
               path="/admin-registration"
               element={<AdminRegistrationForm />}
             />
-            <Route
-              path="/register-health-staff"
-              element={<HealthStaffRegistration />}
-            />{" "}
-            {/* Route for Health Staff Registration */}
+      
+            Route for Health Staff Registration
             {<Route path="/admin-dashboard" element={<AdminDashboard />} />}
-            {/* Route for Admin Dashboard */}
+            Route for Admin Dashboard
             <Route
               path="/doctor-dashboard"
               element={<DoctorDashboard />}
-            />{" "}
-            <Route
-              path="/health-staff-dashboard"
-              element={<HealthStaffDashboard />}
-            />{" "}
-            <Route
-              path="/input-form"
-              element={<InputForm />}
-            />{" "}
-            <Route path="/patient-dashboard" element={<PatientDashboard />} />
-            <Route path="/patient-list" element={<PatientList />} />
-            <Route path="/patient-reports" element={<Reports_text />} />
-            <Route path="/text-form" element={<PatientTextInput />} />
+            />{" "}            */}
+            {/* <Route path="/patient-dashboard" element={<PatientDashboard />} /> */}
             {/* <Route path="/admission" element={<AdmissionForm />} /> */}
             {/* Route to the Admission Form */}
-            <Route path="/admission" element={<AdmissionForm />} />
+            {/* <Route path="/admission" element={<AdmissionForm />} /> */}
             {/* { <Route path="/upload-images-form" element={<UploadImagesForm />} />} */}
-            <Route path="/edit_patient/:id" element={<PatientEditPage />} />
-            <Route path="/d_hcps" element={<DHCPSForm />} />
+            {/* <Route path="/edit_patient/:id" element={<PatientEditPage />} /> */}
+            {/* <Route path="/d_hcps" element={<DHCPSForm />} />
             <Route path="/diagnoses_icd" element={<DiagnosesICDForm />} />
             <Route path="/d_labItems" element={<DLabItemsForm />} />
             <Route path="/d_icd_diagnoses" element={<DISCDiagnosesForm />} />
-            <Route path="/emar" element={<EMARForm />} /> {/* New EMAR route */}
-            <Route path="/drgcodes" element={<DRGCodesForm />} />
+            <Route path="/emar" element={<EMARForm />} /> 
+            <Route path="/drgcodes" element={<DRGCodesForm />} /> */}
             {/* New DRG Codes route */}
-            <Route path="/lab-events" element={<LabEventsForm />} />
+            {/* <Route path="/lab-events" element={<LabEventsForm />} />
             <Route path="/microevents" element={<MicroeventsForm />} />
             <Route path="/omr" element={<OMRForm />} />
             <Route path="/pharmacy" element={<PharmacyForm />} />
@@ -136,10 +258,11 @@ function App() {
             <Route path="/procedure-events" element={<ProcedureEventsForm />} />
             <Route path="/d_items" element={<DItemsForm />} />
             <Route path="/xray" element={<XRayReportForm />} />
-            <Route path="/predict-report" element={<PredictionReport />} />
+            <Route path="/predict-report" element={<PredictionReport />} /> */}
           </Routes>
-        </Router>
+        
       </ThemeProvider>
+      <FooterWrapper/>
     </div>
   );
 }

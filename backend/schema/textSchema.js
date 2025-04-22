@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 
 const te_mo = new mongoose.Schema({
-  itemId: {
-    type: String,
-    required: true,
-    unique: true, // Designate itemId as the primary key (unique identifier)
+  id: {
+    type: Number,
+// Designate itemId as the primary key (unique identifier)
   },
-  label: { type: String, required: true },
-  fluid: { type: String, required: true },
-  category: { type: String, required: true },
+  text: { type: String, },
+  hospital_expire_flag: { type: Number, },
+  los_label: { type: String, },
 });
 
 const texts = mongoose.model("texts", te_mo);

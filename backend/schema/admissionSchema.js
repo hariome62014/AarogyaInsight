@@ -24,6 +24,8 @@ const admissionSchema = new mongoose.Schema({
   edouttime: { type: String},
   diagnosis : { type : String },
   hospital_expire_flag: { type: Number },
+  gender : { type : String },
+  age : { type : Number }
 });
 
 const Admission = mongoose.model("Admission", admissionSchema);

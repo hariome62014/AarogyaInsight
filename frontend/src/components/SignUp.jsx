@@ -488,7 +488,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Placeholder images for buttons
 import AdminIcon from "../assets/2206368.png"; // Replace with actual admin icon
-import PatientIcon from "../assets/Healthcare_characters_vector_6-01.jpg"; // Replace with actual patient icon
+import PatientImg from "../assets/PatientImg.jpg"; // Replace with actual patient icon
 import DoctorIcon from "../assets/46550463-doctor-therapist-medicine-and-health-profession-white-coat-stethoscope-pop-art-retro-style.jpg"; // Replace with actual doctor icon
 import HealthStaffIcon from "../assets/couple-of-medical-staff-healthcare-workers-vector.jpg"; // Replace with actual health staff icon
 
@@ -501,7 +501,7 @@ const SignUp = () => {
 
   const roleIcons = {
     Admin: AdminIcon,
-    Patient: PatientIcon,
+    Patient: PatientImg,
     Doctor: DoctorIcon,
     HealthStaff: HealthStaffIcon,
   };

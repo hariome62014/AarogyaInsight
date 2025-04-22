@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AnalyticsDashboard from "./analytics";
+import { useSelector } from "react-redux";
+import backgroundbanner from '../assets/bghome.svg'
 import {
   TextField,
   Button,
@@ -29,6 +31,8 @@ Chart.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearSca
 
 const HealthStaffDashboard = () => {
   const navigate = useNavigate();
+      const { token } = useSelector(state => state.auth);
+
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,6 +59,10 @@ const HealthStaffDashboard = () => {
     }]
   });
   const [idx, setIdx] = useState(null);
+  
+  // const [selectedDiagnoses, setSelectedDiagnoses] = useState([]);
+  
+
 
 
   const handleLogout = () => {
@@ -66,7 +74,7 @@ const HealthStaffDashboard = () => {
   };
   useEffect(() => {
     // Fetch list of patients from the server
-    const token = localStorage.getItem("jwtToken");
+    
 
     fetch("http://localhost:5000/api/dashboard/health-staff/patients", {
       method: "GET",
@@ -245,259 +253,45 @@ const HealthStaffDashboard = () => {
 
     // Add more forms as needed
   ];
-  // const generateFormLinks = () => {
-  //   return forms.map((form, index) => (
-  //     <Grid item xs={4} key={index}>
-  //       <Link
-  //         to={form.link}
-  //         state={{ selectedSubject_id: selectedPatient.subject_id }}
-  //       >
-  //         <Button variant="contained" color="primary" fullWidth>
-  //           {form.name}
-  //         </Button>
-  //       </Link>
-  //     </Grid>
-  //   ));
-  // };
+
 
   const handle_patient = () => {
-    navigate("../patient-list");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate("/patient-list");
   }
 
   const handle_reports = () => {
-    navigate("../patient-reports");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate("/patient-reports");
   }
 
-  return (
-    // <div>
-    //   <div>
-    //     <AnalyticsDashboard></AnalyticsDashboard>
-    //   </div>
-    //   <Box
-    //     display="flex"
-    //     justifyContent="space-between"
-    //     alignItems="center"
-    //     style={{ marginBottom: "20px" }}
-    //   >
-    //     <NavBar> Health Staff DAshboard</NavBar>
-    //     {/* <Button variant="contained" color="primary" onClick={handleGenerateReport}>
-    //       Generate Report
-    //     </Button> */}
-
-    //     {/* <Typography variant="h4">Health Staff Dashboard</Typography> */}
-    //   </Box>
-
-    //   <Grid container spacing={2}>
-    //     <Grid item xs={12} md={6} lg={4}>
-    //       <TextField
-    //         label="Search Patients"
-    //         variant="outlined"
-    //         value={searchTerm}
-    //         onChange={handleSearch}
-    //         fullWidth
-    //         margin="normal"
-    //       />
-    //       {/* <Button variant="contained" color="primary" onClick={handleGenerateReport}>
-    //       Generate Report
-    //       </Button> */}
-    //       {/* <Button variant="contained" color="primary" onClick={handleGenerateReport}>
-    //         Generate LOS
-    //       </Button>
-    //       <Button variant="contained" color="primary" onClick={handleGenerateReport}>
-    //         Generate MP
-    //       </Button> */}
-    //     </Grid>
-    //     <Grid>
-    //     </Grid>
-    //   </Grid>
-    //   <TableContainer component={Paper} sx={{ margin: "20px 0" }}>
-    //     <Table>
-    //       <TableHead sx={{ backgroundColor: "#f0f0f0" }}>
-    //         <TableRow>
-    //           <TableCell align="center">Subject Id</TableCell>
-    //           <TableCell align="center">First Name</TableCell>
-    //           <TableCell align="center">Last Name</TableCell>
-    //           <TableCell align="center">Gender</TableCell>
-    //           <TableCell align="center">Date of Birth</TableCell>
-    //           <TableCell align="center">Contact Number</TableCell>
-    //         </TableRow>
-    //       </TableHead>
-
-    //       <TableBody>
-    //         {patients
-    //           .filter(
-    //             (patient) =>
-    //               patient.firstName
-    //                 .toLowerCase()
-    //                 .includes(searchTerm.toLowerCase()) ||
-    //               patient.lastName
-    //                 .toLowerCase()
-    //                 .includes(searchTerm.toLowerCase()) ||
-    //               patient.email.toLowerCase().includes(searchTerm.toLowerCase())
-    //           )
-    //           .map((patient, index) => (
-    //             <TableRow
-    //               key={patient.subject_id}
-    //               onClick={() => {
-    //                 handlePatientSelect(patient);
-    //                 setIdx(index)
-    //               }}
-    //               sx={{
-    //                 cursor: "pointer",
-    //                 ...styles.patientCard,
-    //                 ...(selectedPatient === patient
-    //                   ? styles.selectedPatient
-    //                   : {}),
-    //                 "&:hover": {
-    //                   backgroundColor: "#f0f8ff", // Light blue on hover
-    //                 },
-    //                 backgroundColor: index % 2 === 0 ? "#f9f9f9" : "white",
-    //               }}
-    //             >
-    //               <TableCell align="center">{patient.subject_id}</TableCell>
-    //               <TableCell align="center">{patient.firstName}</TableCell>
-    //               <TableCell align="center">{patient.lastName}</TableCell>
-    //               <TableCell align="center">{patient.gender}</TableCell>
-    //               <TableCell align="center">{patient.dob}</TableCell>
-    //               <TableCell align="center">{patient.contactNumber}</TableCell>
-    //             </TableRow>
-    //           ))}
-    //       </TableBody>
-    //     </Table>
-    //   </TableContainer>
-
-    //   <div style={{width: '100%', display: 'flex', justifyContent: 'space-around'}}>
-    //     <div style={{ height: '300px', width: '300px' }}>
-    //       <Pie data={chartData1} />
-    //     </div>
-    //     <div style={{ height: '300px', width: '300px' }}>
-    //       <Pie data={chartData2} />
-    //     </div>
-    //     <div style={{ height: '600px', width: '600px' }}>
-    //     {/* <Bar data= {barData}/> */}
-    //         {idx !== null && <Bar data= {barData}/>}
-
-    //     </div>
-    //   </div>
-
-    //   {selectedPatient && (
-    //     <Paper elevation={3}>
-    //       <Modal open={Boolean(selectedPatient)} onClose={handleCloseModal}>
-    //         <Box
-    //           sx={{
-    //             position: "absolute",
-    //             top: "50%",
-    //             left: "50%",
-    //             transform: "translate(-50%, -50%)",
-    //             width: 400,
-    //             bgcolor: "background.paper",
-    //             border: "2px solid #000",
-    //             boxShadow: 24,
-    //             p: 4,
-    //             maxWidth: "90%",
-    //             overflow: "auto", // Enable scrolling
-    //             maxHeight: "80vh", // Set maximum height for responsiveness
-    //           }}
-    //         >
-    //           <Card elevation={3} sx={{ margin: "20px 0", padding: "16px" }}>
-    //             <CardContent>
-    //               <Typography
-    //                 variant="h4"
-    //                 sx={{
-    //                   marginBottom: "16px",
-    //                   fontFamily: "Verdana, sans-serif",
-    //                   color: "#2C3E50",
-    //                   textShadow: "1px 1px 2px #888888",
-    //                   backgroundColor: "#ECF0F1",
-    //                   padding: "8px",
-    //                   borderRadius: "4px",
-    //                 }}
-    //               >
-    //                 Selected Patient: {selectedPatient.subject_id}
-    //               </Typography>
-    //             </CardContent>
-    //           </Card>
-    //           <Card>
-    //             <Button onClick={() => {
-    //               handleGenerateReport(idx);
-    //               handleCloseModal();
-    //             }}>Generate Report</Button>
-    //           </Card>
-    //           <Accordion>
-    //             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-    //               <Typography
-    //                 variant="h5"
-    //                 sx={{
-    //                   marginBottom: "0px",
-    //                   fontFamily: "Verdana, sans-serif",
-    //                   color: "#2C3E50",
-    //                   textShadow: "1px 1px 2px #888888",
-    //                   backgroundColor: "#ECF0F1",
-    //                   padding: "2px",
-    //                   borderRadius: "2px",
-    //                 }}
-    //               >
-    //                 Forms:
-    //               </Typography>
-    //               {/* <Grid>{generateFormLinks(forms)}</Grid> */}
-    //             </AccordionSummary>
-    //             <AccordionDetails>
-    //               <Table>
-    //                 <TableHead>
-    //                   <TableRow>
-    //                     <TableCell>Form Name</TableCell>
-    //                     <TableCell>Action</TableCell>
-    //                   </TableRow>
-    //                 </TableHead>
-    //                 <TableBody>
-    //                   {/* Map over the forms and render each row */}
-    //                   {forms.map((form, index) => (
-    //                     <TableRow key={index}>
-    //                       <TableCell>{form.name}</TableCell>
-    //                       <TableCell>
-    //                         <Link
-    //                           to={form.link}
-    //                           state={{
-    //                             selectedSubject_id: selectedPatient.subject_id,
-    //                           }}
-    //                           onClick={handleCloseModal}
-    //                         >
-    //                           <Button variant="contained" color="primary">
-    //                             View Form
-    //                           </Button>
-    //                         </Link>
-    //                       </TableCell>
-    //                     </TableRow>
-    //                   ))}
-    //                 </TableBody>
-    //               </Table>
-    //             </AccordionDetails>
-    //           </Accordion>
-    //         </Box>
-    //       </Modal>
-    //       <Button variant="contained" color="primary" onClick={handleLogout}>
-    //         Logout
-    //       </Button>
-
-    //        {/* Render the PredictionReport component */}
-
-    //     </Paper>
-    //   )}
-    // </div>    
-    <div>
-      <AnalyticsDashboard />
-      <div className="flex justify-center space-x-4 mt-4">
-        <button className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none"
-        onClick={handle_patient}>
+  return (   
+    <div
+    className="w-full  bg-white min-h-min pb-6"
+    style={{
+      backgroundImage: `url(${backgroundbanner})`,
+    }}
+  >
+    {/* Align content width with Navbar */}
+    <div className="lg:w-11/12 max-w-screen-xl mx-auto">
+      <AnalyticsDashboard/>
+      <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center mt-4">
+        <button
+          className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[7px] text-richblack-100 shadow-md transition duration-300 ease-in-out hover:bg-richblack-700 hover:text-white hover:shadow-lg hover:scale-105"
+          onClick={handle_patient}
+        >
           See Patient List
         </button>
-        <button className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 focus:outline-none"
-        onClick={handle_reports}>
+        <button
+          className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[7px] text-richblack-100 shadow-md transition duration-300 ease-in-out hover:bg-richblack-700 hover:text-white hover:shadow-lg hover:scale-105"
+          onClick={handle_reports}
+        >
           See Patient Reports
         </button>
       </div>
-
     </div>
+  </div>
+  
     
   );
 };

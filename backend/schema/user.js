@@ -31,19 +31,23 @@ const userSchema = new mongoose.Schema({
     enum: ["male", "female", "other"],
     required: true,
   },
-  contactNumber: {
+  phoneNo: {
     type: String,
-    required: true,
+    // required: true,
     match: /^\d{10}$/,
   },
   address: {
     type: String,
-    required: true,
+    // required: true,
+  },
+  image: {
+    type: String,
+    // required: true,
   },
   role: {
     type: String,
     default: "Patient",
-    enum: ["Patient"],
+    enum: ["Patient","Core Member","Admin"],
   },
   subject_id: {
     type: String, // You can specify any additional configuration you need here

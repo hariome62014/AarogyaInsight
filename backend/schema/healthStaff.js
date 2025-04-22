@@ -23,8 +23,18 @@ const healthStaffSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "HealthStaff",
-    enum: ["Pending", "pending", "HealthStaff"],
+    default: "Core Member",
+    enum: ["Pending", "pending", "Core Member"],
+  },
+  image: {
+    type: String,
+    // required: true,
+  },
+  token: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
   },
 });
 

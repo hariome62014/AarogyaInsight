@@ -3,10 +3,12 @@ const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { connectToDB } = require("./database/db");
+const connectDB = require("./database/db");
+const {auth}= require('./middlewares/auth')
 
 const registrationRoutes = require("./Routes/registrationRoutes");
 const signInRoutes = require("./Routes/SignInRoutes");
+const userRoutes= require('./Routes/User');
 //const dashboardRoutes = require('./Routes/DashboardRoutes');
 const admissionRoutes = require("./Routes/admissionRoutes");
 const dischargeRoutes = require("./Routes/dischargeRoutes");
@@ -96,7 +98,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use("/api/login", signInRoutes);
+// app.use("/api/login", signInRoutes);
+
+app.use("/api/auth", userRoutes);
+
 app.use("/api/registration", registrationRoutes);
 
 app.use("/api/admission", admissionRoutes);
@@ -112,7 +117,7 @@ app.use("/api/dashboard/doctor", doctorDashboardRoutes);
 app.use("/api/dashboard/users", adminDashboardRoutes);
 app.use("/api/login/health-staff", healthStaffLoginRoutes);
 app.use("/api/register-health-staff", healthStaffRegistration); // Corrected route path
-app.use("/api/dashboard/health-staff", healthStaffDashboardRoutes);
+app.use("/api/dashboard/health-staff",healthStaffDashboardRoutes);
 app.use("/api/calculate-sum", calculateRoute);
 app.use("/api/patients", patientEdit);
 app.use("/api/generate-patient-id", generatePatient);
@@ -165,7 +170,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the backend!"); //replaceable
 });
 
-connectToDB();
+connectDB();
 
 const port = 5000;
 app.listen(port, () => {
